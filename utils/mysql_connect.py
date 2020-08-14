@@ -29,20 +29,22 @@ class MySql(object):
             db.close()
             return data
 
-    def mysql_update(self,sql,var):
+    def mysql_update(self,sql):
         get_connect = MySql()
         db = get_connect.mysql_connect()
-        try:
-            cursor = db.cursor()
-            cursor.execute(sql,var)
-            db.commit()
-            print("更新成功")
-        except Exception as e:
-            traceback.print_exc()
-            db.rollback()
-        finally:
-            cursor.close()
-            db.close()
+        for sql in sql:
+            try:
+                cursor = db.cursor()
+                cursor.execute(sql)
+                db.commit()
+                print("Affected rows:",cursor.rowcount)
+            except Exception as e:
+                traceback.print_exc()
+                db.rollback()
+            finally:
+                pass
+        cursor.close()
+        db.close()
 
 
 
