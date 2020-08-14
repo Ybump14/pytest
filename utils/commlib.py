@@ -25,14 +25,10 @@ def get_test_data(*args):
     return case, parameters
 
 
-def get_headers(http, token):
+def get_request(env, name, http, token):
     headers = http["headers"]
     headers["Authorization"] = token
     headers["Timestamp"] = str(round(time.time()) * 1000)
-    return headers
-
-
-def get_request(env, name, http, headers):
     requests.adapters.DEFAULT_RETRIES = 5
     r = requests.session()
     r.keep_alive = False

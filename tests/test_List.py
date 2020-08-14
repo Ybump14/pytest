@@ -3,7 +3,7 @@ import time
 import pytest
 
 sys.path.append(os.getcwd())
-from utils.commlib import get_test_data, res_validate, get_headers, get_request
+from utils.commlib import get_test_data, res_validate, get_request
 
 cases, parameters = get_test_data(
     "E:/110_pytest/data/carSalesDetailReport.yml",
@@ -30,6 +30,5 @@ list_params = list(parameters)
 class Test_List(object):
     @pytest.mark.parametrize("name,http,validate", list_params, ids=cases)
     def test_List(self, env, name, http, validate, token):
-        headers = get_headers(http, token)
-        r = get_request(env=env, name=name, http=http, headers=headers)
+        r = get_request(env=env, name=name, http=http, token=token)
         res_validate(data=r.json(), validate=validate, status_code=r.status_code)
