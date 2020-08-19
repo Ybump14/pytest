@@ -26,7 +26,6 @@ cases, parameters = get_test_data(
 list_params = list(parameters)
 
 
-@pytest.mark.skip(reason='skip')
 class Test_List(object):
     @pytest.mark.parametrize("name,http,validate", list_params, ids=cases)
     def test_List(self, env, name, http, validate, token):

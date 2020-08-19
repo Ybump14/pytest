@@ -36,6 +36,18 @@ def get_request(env, name, http, token):
     return r
 
 
+def parameters_request(env, parameters, token):
+    headers = parameters["request"]["headers"]
+    headers["Authorization"] = token
+    headers["Timestamp"] = str(round(time.time()) * 1000)
+    requests.adapters.DEFAULT_RETRIES = 5
+    r = requests.session()
+    r.keep_alive = False
+    r = requests.request(parameters["request"]["method"], url=env["data"]["url"] + parameters['name'], headers=headers,
+                         json=parameters["request"]["data"])
+    return r
+
+
 def decode(key, data):
     cipher = AES.new(key)
     result2 = base64.b64decode(data)

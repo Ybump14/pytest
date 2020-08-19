@@ -1,12 +1,31 @@
 import json
 import os, sys, requests
-import time
 
 import yaml
 import pytest
 
 sys.path.append(os.getcwd())
 from utils.commlib import decode
+
+
+def pytest_generate_tests(metafunc):
+    ids = []
+    markers = metafunc.definition.own_markers
+    for marker in markers:
+        if marker.name == 'datafile':
+            test_data_path = os.path.join(metafunc.config.rootdir, marker.args[0])
+            with open(test_data_path, 'r', encoding='utf-8') as f:
+                ext = os.path.splitext(test_data_path)[-1]
+                if ext in ['.yaml', '.yml']:
+                    test_data = yaml.load(f.read(), Loader=yaml.SafeLoader)
+                elif ext in ['.json']:
+                    test_data = json.load(f)
+                else:
+                    raise TypeError('datafile must be yaml or json,root must be tests')
+    if "parameters" in metafunc.fixturenames:
+        for data in test_data['teststeps']:
+            ids.append(data['name'])
+        metafunc.parametrize("parameters", test_data['teststeps'], ids=ids, scope="function")
 
 
 def pytest_addoption(parser):
@@ -47,10 +66,6 @@ def token(env):
         res = r.json()
         token = res["data"]["token"]
         return token
-
-
-
-
 
 #
 # def pytest_assertrepr_compare(config, op, left, right):
