@@ -43,7 +43,6 @@ class Test_CarInOrder(object):
     @pytest.mark.run(order=3)
     @pytest.mark.datafile("110_data/CarInOrder/CarInStock.yml")
     def test_CarInStock(self, env, parameters, token):
-        db = MySql()
         parameters["request"]['data']['carInOrderId'] = (carInOrderId)
         parameters["request"]['data']['carInOrderDetails'][0]['id'] = (carInOrderDetails)
         r = parameters_request(env, parameters, token)
@@ -52,7 +51,6 @@ class Test_CarInOrder(object):
     @pytest.mark.run(order=4)
     @pytest.mark.datafile("110_data/CarInOrder/CarInOrderFinalAudit.yml")
     def test_CarInOrderFinalAudit(self, env, parameters, token):
-        db = MySql()
         parameters["request"]['data']['carInOrderId'] = (carInOrderId)
         parameters["request"]['data']['carInOrderDetails'][0]['carInOrderDetailId'] = (carInOrderDetails)
         r = parameters_request(env, parameters, token)
