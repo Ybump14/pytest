@@ -34,3 +34,5 @@ class car_stock(Base):
 db = sql_connect()
 stock = db.query(car_stock).filter(car_stock.vin == '12121212121').first()
 print(stock)
+
+#i am master
