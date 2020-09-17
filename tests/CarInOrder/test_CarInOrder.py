@@ -6,25 +6,28 @@ from utils.Sql_connect import sql_connect
 from utils.mysql_connect import MySql
 
 sys.path.append(os.getcwd())
-from utils.commlib import res_validate, parameters_request
+from utils.commlib import res_validate, parameters_request, Publice
 
 vin = None
 expressNo = None
 carInOrderId = None
 carInOrderDetails = None
-
+get_vin = Publice()
 
 class Test_CarInOrder(object):
 
+    # @pytest.mark.skip(reason='test')
     @pytest.mark.run(order=1)
     @pytest.mark.datafile("110_data/CarInOrder/CarInOrderSave.yml")
     def test_CarInOrderSave(self, env, parameters, token):
-        r = parameters_request(env, parameters, token)
-        res_validate(r.json(), parameters["validate"], r.status_code)
         global vin
         global expressNo
         global carInOrderId
         global carInOrderDetails
+        parameters["request"]['data']['carInOrderDetails'][0]['vin'] = get_vin.ranstr(17)
+        parameters["request"]['data']['expressNo'] = get_vin.ranlong(6)
+        r = parameters_request(env, parameters, token)
+        res_validate(r.json(), parameters["validate"], r.status_code)
         vin = parameters["request"]['data']['carInOrderDetails'][0]['vin']
         expressNo = parameters["request"]['data']['expressNo']
         session = sql_connect()
@@ -33,6 +36,7 @@ class Test_CarInOrder(object):
         carInOrderDetails = session.query(car_in_order_details).filter(
             car_in_order_details.vin == vin).first().id
 
+    # @pytest.mark.skip(reason='test')
     @pytest.mark.run(order=2)
     @pytest.mark.datafile("110_data/CarInOrder/CarInOrderAudit.yml")
     def test_CarInOrderAudit(self, env, parameters, token):
@@ -40,6 +44,7 @@ class Test_CarInOrder(object):
         r = parameters_request(env, parameters, token)
         res_validate(r.json(), parameters["validate"], r.status_code)
 
+    # @pytest.mark.skip(reason='test')
     @pytest.mark.run(order=3)
     @pytest.mark.datafile("110_data/CarInOrder/CarInStock.yml")
     def test_CarInStock(self, env, parameters, token):
@@ -48,6 +53,7 @@ class Test_CarInOrder(object):
         r = parameters_request(env, parameters, token)
         res_validate(r.json(), parameters["validate"], r.status_code)
 
+    # @pytest.mark.skip(reason='test')
     @pytest.mark.run(order=4)
     @pytest.mark.datafile("110_data/CarInOrder/CarInOrderFinalAudit.yml")
     def test_CarInOrderFinalAudit(self, env, parameters, token):
@@ -56,6 +62,7 @@ class Test_CarInOrder(object):
         r = parameters_request(env, parameters, token)
         res_validate(r.json(), parameters["validate"], r.status_code)
 
+    @pytest.mark.skip(reason='test')
     @pytest.mark.run(order=5)
     def test_DeleteDate(self):
         sql = ("DELETE FROM car_in_order_details WHERE vin = '%s'" % vin,
