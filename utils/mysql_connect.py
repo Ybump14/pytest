@@ -15,7 +15,7 @@ class MySql(object):
         )
         return db
 
-    def mysql_select(self,sql):
+    def mysql_select(self, sql):
         get_connect = MySql()
         db = get_connect.mysql_connect()
         try:
@@ -29,7 +29,7 @@ class MySql(object):
             db.close()
             return data
 
-    def mysql_update(self,sql):
+    def mysql_update(self, sql):
         get_connect = MySql()
         db = get_connect.mysql_connect()
         for sql in sql:
@@ -37,7 +37,7 @@ class MySql(object):
                 cursor = db.cursor()
                 cursor.execute(sql)
                 db.commit()
-                print("Affected rows:",cursor.rowcount)
+                print("Affected rows:", cursor.rowcount)
             except Exception as e:
                 traceback.print_exc()
                 db.rollback()
@@ -45,9 +45,3 @@ class MySql(object):
                 pass
         cursor.close()
         db.close()
-
-
-
-
-
-

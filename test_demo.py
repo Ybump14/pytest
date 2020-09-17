@@ -3,8 +3,6 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, String
 
-from utils.Sql_connect import sql_connect
-
 Base = declarative_base()
 
 
@@ -29,9 +27,3 @@ class car_stock(Base):
     def __repr__(self):
         return "<User(id='%s',vin='%s')>" % (
             self.id, self.vin)
-
-
-db = sql_connect()
-stock = db.query(car_stock).filter(car_stock.vin == '12121212121').first()
-print(stock)
-
