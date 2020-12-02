@@ -19,8 +19,11 @@ cases, parameters = get_test_data(
     "E:/110_pytest/data/精品管理.yml", "E:/110_pytest/data/车辆管理.yml",
     "E:/110_pytest/data/车辆销售管理.yml", "E:/110_pytest/data/维修接待管理.yml",
     "E:/110_pytest/data/保险管理.yml", "E:/110_pytest/data/营销管理.yml",
-    "E:/110_pytest/data/外销_内部领件管理.yml", "E:/110_pytest/data/收款管理.yml",
-    "E:/110_pytest/data/开票管理.yml", "E:/110_pytest/data/财务管理.yml",
+    "E:/110_pytest/data/外销_内部领件管理.yml",
+    "E:/110_pytest/data/收款管理.yml",
+    "E:/110_pytest/data/otherReceiveOrderDetailReport.yml",
+    "E:/110_pytest/data/开票管理.yml",
+    "E:/110_pytest/data/财务管理.yml",
     "E:/110_pytest/data/参数_权限_系统管理.yml"
 )
 list_params = list(parameters)
