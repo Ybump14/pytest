@@ -6,7 +6,7 @@ from utils.Sql_connect import sql_connect
 from utils.mysql_connect import MySql
 
 sys.path.append(os.getcwd())
-from utils.commlib import res_validate, parameters_request, Publice
+from utils.commlib import parameters_request, Publice
 
 vin = None
 expressNo = None
@@ -26,34 +26,31 @@ class Test_CarInOrder(object):
         global expressNo
         global carInOrderId
         global carInOrderDetails
+        session = sql_connect()
         parameters["request"]['data']['carInOrderDetails'][0]['vin'] = get_vin.ranstr(17)
         parameters["request"]['data']['expressNo'] = get_vin.ranlong(6)
-        r = parameters_request(env, parameters, token)
-        res_validate(r.json(), parameters["validate"], r.status_code)
+        parameters_request(env, parameters, token)
         vin = parameters["request"]['data']['carInOrderDetails'][0]['vin']
         expressNo = parameters["request"]['data']['expressNo']
-        session = sql_connect()
         carInOrderId = session.query(car_in_order_details).filter(
             car_in_order_details.vin == vin).first().car_in_order_id
         carInOrderDetails = session.query(car_in_order_details).filter(
             car_in_order_details.vin == vin).first().id
 
-    @pytest.mark.skip(reason='test')
+    # @pytest.mark.skip(reason='test')
     @pytest.mark.run(order=2)
     @pytest.mark.datafile("110_data/carInOrder/CarInOrderAudit.yml")
     def test_CarInOrderAudit(self, env, parameters, token):
         parameters["request"]['data']['carInOrderId'] = carInOrderId
-        r = parameters_request(env, parameters, token)
-        res_validate(r.json(), parameters["validate"], r.status_code)
+        parameters_request(env, parameters, token)
 
-    @pytest.mark.skip(reason='test')
+    # @pytest.mark.skip(reason='test')
     @pytest.mark.run(order=3)
     @pytest.mark.datafile("110_data/carInOrder/CarInStock.yml")
     def test_CarInStock(self, env, parameters, token):
         parameters["request"]['data']['carInOrderId'] = (carInOrderId)
         parameters["request"]['data']['carInOrderDetails'][0]['id'] = (carInOrderDetails)
-        r = parameters_request(env, parameters, token)
-        res_validate(r.json(), parameters["validate"], r.status_code)
+        parameters_request(env, parameters, token)
 
     @pytest.mark.skip(reason='test')
     @pytest.mark.run(order=4)
@@ -61,8 +58,7 @@ class Test_CarInOrder(object):
     def test_CarInOrderFinalAudit(self, env, parameters, token):
         parameters["request"]['data']['carInOrderId'] = (carInOrderId)
         parameters["request"]['data']['carInOrderDetails'][0]['carInOrderDetailId'] = (carInOrderDetails)
-        r = parameters_request(env, parameters, token)
-        res_validate(r.json(), parameters["validate"], r.status_code)
+        parameters_request(env, parameters, token)
 
     @pytest.mark.skip(reason='test')
     @pytest.mark.run(order=5)
@@ -74,24 +70,22 @@ class Test_CarInOrder(object):
         db = MySql()
         db.mysql_update(sql)
 
-    @pytest.mark.skip(reason='test')
+    # @pytest.mark.skip(reason='test')
     @pytest.mark.run(order=6)
     @pytest.mark.datafile("110_data/carInOrder/CarSalesContractSave.yml")
     def test_CarSalesContractSave(self, env, parameters, token):
         r = parameters_request(env, parameters, token)
-        res_validate(r.json(), parameters["validate"], r.status_code)
         global contractId
         contractId = r.json()['data']['id']
 
-    @pytest.mark.skip(reason='test')
+    # @pytest.mark.skip(reason='test')
     @pytest.mark.run(order=7)
     @pytest.mark.datafile("110_data/carInOrder/CarSalesContractAudit.yml")
     def test_CarSalesContractAudit(self, env, parameters, token):
         parameters['request']['data']['contractId'] = contractId
-        r = parameters_request(env, parameters, token)
-        res_validate(r.json(), parameters["validate"], r.status_code)
+        parameters_request(env, parameters, token)
 
-    @pytest.mark.skip(reason='test')
+    # @pytest.mark.skip(reason='test')
     @pytest.mark.run(order=8)
     @pytest.mark.datafile("110_data/carInOrder/contractAssgnationCarOrReleaseCar.yml")
     def test_contractAssgnationCarOrReleaseCar(self, env, parameters, token):
@@ -100,5 +94,4 @@ class Test_CarInOrder(object):
         carInfoId = db.mysql_select(sql)
         parameters['request']['data']['contractId'] = contractId
         parameters['request']['data']['carInfoId'] = carInfoId
-        r = parameters_request(env, parameters, token)
-        res_validate(r.json(), parameters["validate"], r.status_code)
+        parameters_request(env, parameters, token)

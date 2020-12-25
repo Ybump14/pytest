@@ -3,7 +3,6 @@ import json
 import random
 import string
 import time
-
 import requests
 import yaml
 from Crypto.Cipher import AES
@@ -25,7 +24,7 @@ def get_test_data(*args):
     return case, parameters
 
 
-def get_request(env, name, http, token):
+def get_request(env, name, http, validate, token):
     headers = http["headers"]
     headers["Authorization"] = token
     headers["Timestamp"] = str(round(time.time()) * 1000)
@@ -33,6 +32,7 @@ def get_request(env, name, http, token):
     r = requests.session()
     r.keep_alive = False
     r = requests.request(http["method"], url=env["data"]["url"] + name, headers=headers, json=http["data"])
+    res_validate(r.json(), validate, r.status_code)
     return r
 
 
@@ -45,6 +45,7 @@ def parameters_request(env, parameters, token):
     r.keep_alive = False
     r = requests.request(parameters["request"]["method"], url=env["data"]["url"] + parameters['name'], headers=headers,
                          json=parameters["request"]["data"])
+    res_validate(r.json(), parameters["validate"], r.status_code)
     return r
 
 
