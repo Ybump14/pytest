@@ -42,6 +42,5 @@ class MySql(object):
                 traceback.print_exc()
                 db.rollback()
             finally:
-                pass
-        cursor.close()
-        db.close()
+                cursor.close()
+                db.close()
