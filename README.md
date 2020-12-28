@@ -28,8 +28,17 @@ pip install allure-pytest
 
 3.可以看到在data目录下生成了【文件名.yml】文件
 
-4.进入test_List文件，修改代码为cases, parameters = get_test_data("D:/git/pytest/data/文件名.yml")
+4.进入test_List文件，添加
 
+示例代码：
+```python
+class Test_List():
+
+    @pytest.mark.datafile("data/文件名.yml")
+    def test_eg(self, env, parameters, token):
+        parameters_request(env, parameters, token)
+        
+```
 ---
 
 - 执行脚本
