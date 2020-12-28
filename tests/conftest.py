@@ -48,10 +48,31 @@ def env(request):
 
 
 @pytest.fixture(scope="session")
-def token(env):
+def token_oa(env):
     url1 = env["data"]["url"]
-    url2 = "/api/staff/login.json"
-    url = url1 + url2
+    url_oa = env["data"]["url_oa"]
+    url = url1 + url_oa
+    data = {
+        "loginNum": env["data"]["username"],
+        "password": env["data"]["password"]
+    }
+    r = requests.post(url=url, json=data)
+    if "randomId" in r.json():
+        response = decode(r.json()["randomId"], r.json()["encryptData"])
+        res = json.loads(response)
+        token = res["data"]["token"]
+        return token
+    else:
+        res = r.json()
+        token = res["data"]["token"]
+        return token
+
+
+@pytest.fixture(scope="session")
+def token_financial(env):
+    url1 = env["data"]["url"]
+    url_financial = env["data"]["url_financial"]
+    url = url1 + url_financial
     data = {
         "loginNum": env["data"]["username"],
         "password": env["data"]["password"]

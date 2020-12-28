@@ -1,5 +1,7 @@
 data:
   url: http://192.168.1.110:4200
+  url_oa: "/api/staff/login.json"
+  url_financial : "/api/oaSystem/login.json"
   username: 15700009999
   password: mQAdelhBxWqt/y380cjUVoydl+c=
 
