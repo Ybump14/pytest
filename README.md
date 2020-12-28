@@ -41,9 +41,13 @@ class Test_List():
 ```
 ---
 
-- 执行脚本
+- 执行所有符合命名规范的文件
 ```python
-py.test
+py.test -v
+```
+- 指定环境执行特定文件
+```python
+py.test tests/test_List.py -v --env test/110/prod #(可选，pytest_addoption中可查看，默认为110)
 ```
 - 指定–alluredir选项及结果数据保存的目录
 ```
