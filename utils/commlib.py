@@ -31,20 +31,26 @@ def get_request(env, name, http, validate, token):
     requests.adapters.DEFAULT_RETRIES = 5
     r = requests.session()
     r.keep_alive = False
-    r = requests.request(http["method"], url=env["data"]["url"] + name, headers=headers, json=http["data"])
+    r = requests.request(http["method"], url=env["data"]["url1"] + name, headers=headers, json=http["data"])
     res_validate(r.json(), validate, r.status_code)
     return r
 
 
-def parameters_request(env, parameters, token):
+def parameters_request(env, parameters, token, Environmental=None):
     headers = parameters["request"]["headers"]
     headers["Authorization"] = token
     headers["Timestamp"] = str(round(time.time()) * 1000)
     requests.adapters.DEFAULT_RETRIES = 5
     r = requests.session()
     r.keep_alive = False
-    r = requests.request(parameters["request"]["method"], url=env["data"]["url"] + parameters['name'], headers=headers,
-                         json=parameters["request"]["data"])
+    if Environmental in 'oa':
+        r = requests.request(parameters["request"]["method"], url=env["data"]["url1"] + parameters['name'],
+                             headers=headers,
+                             json=parameters["request"]["data"])
+    else:
+        r = requests.request(parameters["request"]["method"], url=env["data"]["url2"] + parameters['name'],
+                             headers=headers,
+                             json=parameters["request"]["data"])
     res_validate(r.json(), parameters["validate"], r.status_code)
     return r
 

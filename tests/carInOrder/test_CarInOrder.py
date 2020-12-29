@@ -18,7 +18,7 @@ get_vin = Publice()
 
 class Test_CarInOrder(object):
 
-    # @pytest.mark.skip(reason='test')
+    @pytest.mark.skip(reason='test')
     @pytest.mark.run(order=1)
     @pytest.mark.datafile("110_data/carInOrder/CarInOrderSave.yml")
     def test_CarInOrderSave(self, env, parameters, token_oa):
@@ -29,7 +29,7 @@ class Test_CarInOrder(object):
         session = sql_connect()
         parameters["request"]['data']['carInOrderDetails'][0]['vin'] = get_vin.ranstr(17)
         parameters["request"]['data']['expressNo'] = get_vin.ranlong(6)
-        parameters_request(env, parameters, token_oa)
+        parameters_request(env, parameters, token_oa, Environmental='oa')
         vin = parameters["request"]['data']['carInOrderDetails'][0]['vin']
         expressNo = parameters["request"]['data']['expressNo']
         carInOrderId = session.query(car_in_order_details).filter(
@@ -37,14 +37,14 @@ class Test_CarInOrder(object):
         carInOrderDetails = session.query(car_in_order_details).filter(
             car_in_order_details.vin == vin).first().id
 
-    # @pytest.mark.skip(reason='test')
+    @pytest.mark.skip(reason='test')
     @pytest.mark.run(order=2)
     @pytest.mark.datafile("110_data/carInOrder/CarInOrderAudit.yml")
     def test_CarInOrderAudit(self, env, parameters, token_oa):
         parameters["request"]['data']['carInOrderId'] = carInOrderId
         parameters_request(env, parameters, token_oa)
 
-    # @pytest.mark.skip(reason='test')
+    @pytest.mark.skip(reason='test')
     @pytest.mark.run(order=3)
     @pytest.mark.datafile("110_data/carInOrder/CarInStock.yml")
     def test_CarInStock(self, env, parameters, token_oa):
@@ -70,7 +70,7 @@ class Test_CarInOrder(object):
         db = MySql()
         db.mysql_update(sql)
 
-    # @pytest.mark.skip(reason='test')
+    @pytest.mark.skip(reason='test')
     @pytest.mark.run(order=6)
     @pytest.mark.datafile("110_data/carInOrder/CarSalesContractSave.yml")
     def test_CarSalesContractSave(self, env, parameters, token_oa):
@@ -78,14 +78,14 @@ class Test_CarInOrder(object):
         global contractId
         contractId = r.json()['data']['id']
 
-    # @pytest.mark.skip(reason='test')
+    @pytest.mark.skip(reason='test')
     @pytest.mark.run(order=7)
     @pytest.mark.datafile("110_data/carInOrder/CarSalesContractAudit.yml")
     def test_CarSalesContractAudit(self, env, parameters, token_oa):
         parameters['request']['data']['contractId'] = contractId
         parameters_request(env, parameters, token_oa)
 
-    # @pytest.mark.skip(reason='test')
+    @pytest.mark.skip(reason='test')
     @pytest.mark.run(order=8)
     @pytest.mark.datafile("110_data/carInOrder/contractAssgnationCarOrReleaseCar.yml")
     def test_contractAssgnationCarOrReleaseCar(self, env, parameters, token_oa):

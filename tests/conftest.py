@@ -49,7 +49,7 @@ def env(request):
 
 @pytest.fixture(scope="session")
 def token_oa(env):
-    url1 = env["data"]["url"]
+    url1 = env["data"]["url1"]
     url_oa = env["data"]["url_oa"]
     url = url1 + url_oa
     data = {
@@ -70,7 +70,7 @@ def token_oa(env):
 
 @pytest.fixture(scope="session")
 def token_financial(env):
-    url1 = env["data"]["url"]
+    url1 = env["data"]["url2"]
     url_financial = env["data"]["url_financial"]
     url = url1 + url_financial
     data = {
