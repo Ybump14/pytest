@@ -102,3 +102,7 @@ class Test_List():
     @pytest.mark.datafile("data/parameter_auth_systemManagement.yml")
     def test_parameter_auth_systemManagement(self, env, parameters, token_oa):
         parameters_request(env, parameters, token_oa, Environmental='oa')
+
+
+if __name__ == '__main__':
+    pytest.main(['-v --lf', 'test_List.py'])
