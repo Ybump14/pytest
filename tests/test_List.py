@@ -39,6 +39,14 @@ class Test_List():
     def test_insuranceOrderDetailReport(self, env, parameters, token_oa):
         parameters_request(env, parameters, token_oa, Environmental='oa')
 
+    @pytest.mark.datafile("data/otherReceiveOrderDetailReport.yml")
+    def test_otherReceiveOrderDetailReport(self, env, parameters, token_oa):
+        parameters_request(env, parameters, token_oa, Environmental='oa')
+
+    @pytest.mark.datafile("data/carRedemOrderFinancingReport.yml")
+    def test_otherReceiveOrderDetailReport(self, env, parameters, token_oa):
+        parameters_request(env, parameters, token_oa, Environmental='oa')
+
     @pytest.mark.datafile("data/teamManagement.yml")
     def test_teamManagement(self, env, parameters, token_oa):
         parameters_request(env, parameters, token_oa, Environmental='oa')
@@ -87,10 +95,6 @@ class Test_List():
     def test_receiptManagement(self, env, parameters, token_oa):
         parameters_request(env, parameters, token_oa, Environmental='oa')
 
-    @pytest.mark.datafile("data/otherReceiveOrderDetailReport.yml")
-    def test_otherReceiveOrderDetailReport(self, env, parameters, token_oa):
-        parameters_request(env, parameters, token_oa, Environmental='oa')
-
     @pytest.mark.datafile("data/ticketManagement.yml")
     def test_ticketManagement(self, env, parameters, token_oa):
         parameters_request(env, parameters, token_oa, Environmental='oa')
@@ -105,4 +109,6 @@ class Test_List():
 
 
 if __name__ == '__main__':
-    pytest.main(['-v --lf', 'test_List.py'])
+    pytest.main(['-v', '--lf', 'test_List.py'])
+
+# pytest tests/test_List.py -v
