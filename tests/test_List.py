@@ -1,7 +1,4 @@
-import os, sys
 import pytest
-
-sys.path.append(os.getcwd())
 from utils.commlib import parameters_request
 
 
@@ -109,6 +106,7 @@ class Test_List():
 
 
 if __name__ == '__main__':
-    pytest.main(['-v', '--lf', 'test_List.py'])
+    # pytest.main(['-v', '-s', 'test_List.py'])
+    pytest.main(['-v', '-s', '--env','test','test_List.py'])
 
-# pytest tests/test_List.py -v
+# pytest tests/test_List.py -v --lf -s

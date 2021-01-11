@@ -1,14 +1,11 @@
 import inspect
 import json
-import os, sys, requests
-
+import os, requests
 import allure
 import yaml
 import pytest
 from _pytest import logging
 from _pytest.assertion.util import assertrepr_compare
-
-sys.path.append(os.getcwd())
 from utils.commlib import decode
 
 
