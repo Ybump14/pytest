@@ -60,29 +60,6 @@ allure generate ./result/ -o ./report/ --clean
 
 ---
 
-**相关错误**
-
----
-
->将获取测试数据的函数分离，在执行pytest调用测试主函数时，抛出错误，提示找不到相关模块
-```
-__________________________________________________________________________________________________ ERROR collecting tests/test_Login.py __________________________________________________________________________________________________
-ImportError while importing test module 'E:\110_pytest\tests\test_Login.py'.
-Hint: make sure your test modules/packages have valid Python names.
-Traceback:
-tests\test_Login.py:6: in <module>
-    from utils.commlib import get_test_data
-E   ModuleNotFoundError: No module named 'utils'
-```
-
-此时需要在导入模块前加入这两句,必须写在[from xxx.xxx import xxx]之前,否则无效
-```
-import os, sys, allure, requests
-sys.path.append(os.getcwd())
-```
-
----
-
 **其他说明**
 
 ---
@@ -197,8 +174,4 @@ teststep_dict["validate"]["Content-Type"] = headers_mapping["Content-Type"]
                 # TODO: make compatible with more mimeType
                 pass
 ```
-
-修改源码是方便使用自己习惯的断言，用dict获取字段值比较直接
-
-另外是har文件转为yml文件时，加多一个判断，当文件格式为text/plain，将内容转换为json格式
 
