@@ -58,13 +58,11 @@ def token_oa(env):
         "password": env["data"]["password"]
     }
     r = requests.post(url=url, json=data)
-    if "randomId" in r.json():
-        response = decode(r.json()["randomId"], r.json()["encryptData"])
+    res = r.json()
+    if "randomId" in res:
+        response = decode(res["randomId"], res["encryptData"])
         res = json.loads(response)
-        token = res["data"]["token"]
-    else:
-        res = r.json()
-        token = res["data"]["token"]
+    token = res["data"]["token"]
     return token
 
 
