@@ -73,15 +73,10 @@ def decode(key, data):
 def res_validate(data, validate, status_code):
     if "randomId" in data:
         response = decode(data["randomId"], data["encryptData"])
-        res = json.loads(response)
-        assert res["code"] == validate["code"]
-        assert res["msg"] == validate["msg"]
-        assert status_code == validate["status"]
-    else:
-        res = data
-        assert res["code"] == validate["code"]
-        assert res["msg"] == validate["msg"]
-        assert status_code == validate["status"]
+        data = json.loads(response)
+    assert data["code"] == validate["code"]
+    assert data["msg"] == validate["msg"]
+    assert status_code == validate["status"]
 
 
 class Publice(object):
