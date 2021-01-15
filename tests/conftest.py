@@ -62,11 +62,10 @@ def token_oa(env):
         response = decode(r.json()["randomId"], r.json()["encryptData"])
         res = json.loads(response)
         token = res["data"]["token"]
-        return token
     else:
         res = r.json()
         token = res["data"]["token"]
-        return token
+    return token
 
 
 @pytest.fixture(scope="session")
@@ -79,15 +78,12 @@ def token_financial(env):
         "password": env["data"]["password"]
     }
     r = requests.post(url=url, json=data)
-    if "randomId" in r.json():
-        response = decode(r.json()["randomId"], r.json()["encryptData"])
+    res = r.json()
+    if "randomId" in res:
+        response = decode(res["randomId"], res["encryptData"])
         res = json.loads(response)
-        token = res["data"]["token"]
-        return token
-    else:
-        res = r.json()
-        token = res["data"]["token"]
-        return token
+    token = res["data"]["token"]
+    return token
 
 
 def pytest_assertrepr_compare(config, op, left, right):
