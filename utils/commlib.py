@@ -1,4 +1,5 @@
 import base64
+from datetime import datetime, date, timedelta, time
 import json
 import random
 import string
@@ -32,7 +33,10 @@ def get_request(env, name, http, validate, token):
     r = requests.session()
     r.keep_alive = False
     r = requests.request(http["method"], url=env["data"]["url1"] + name, headers=headers, json=http["data"])
-    res_validate(r.json(), validate, r.status_code)
+    if r.status_code == 200:
+        res_validate(r.json(), validate, r.status_code)
+    else:
+        raise TypeError('the response status.code is %s' % r.status_code)
     return r
 
 
@@ -51,7 +55,10 @@ def parameters_request(env, parameters, token, Environmental=None):
         r = requests.request(parameters["request"]["method"], url=env["data"]["url2"] + parameters['name'],
                              headers=headers,
                              json=parameters["request"]["data"])
-    res_validate(r.json(), parameters["validate"], r.status_code)
+    if r.status_code == 200:
+        res_validate(r.json(), parameters["validate"], r.status_code)
+    else:
+        raise TypeError('the response status.code is %s' % r.status_code)
     return r
 
 
@@ -145,3 +152,28 @@ class Publice(object):
             "province": province,
             "city": city
         }
+
+
+class DateUtil:
+
+    def __init__(self, year, month, day):
+        self.year = year
+        self.month = month
+        self.day = day
+
+    def timeStamp(self):
+        stamp = datetime(year=self.year, month=self.month, day=self.day)
+        sstamp = int(time.mktime(
+            time.strptime(str(stamp.replace(hour=0, minute=0, second=0)), "%Y-%m-%d %H:%M:%S"))) * 1000
+        estamp = int(time.mktime(time.strptime(str(stamp.replace(hour=23, minute=59, second=59)),
+                                               "%Y-%m-%d %H:%M:%S"))) * 1000
+        return sstamp, estamp
+
+    @classmethod
+    def stamp(cls):
+        sta = round(time.time())
+        sstamp = int(time.mktime(time.strptime(str(datetime.fromtimestamp(sta).replace(hour=0, minute=0, second=0)),
+                                               "%Y-%m-%d %H:%M:%S"))) * 1000
+        estamp = int(time.mktime(time.strptime(str(datetime.fromtimestamp(sta).replace(hour=23, minute=59, second=59)),
+                                               "%Y-%m-%d %H:%M:%S"))) * 1000
+        return sstamp, estamp
