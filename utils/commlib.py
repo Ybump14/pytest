@@ -91,12 +91,14 @@ class Util:
 
     @classmethod
     def ranstr(self, num):
-        salt = ''.join(random.sample(string.ascii_uppercase + string.digits, num))
+        # salt = ''.join(random.sample(string.ascii_uppercase + string.digits, num))
+        salt = ''.join(random.choice(string.ascii_uppercase + string.digits) for i in range(num))
         return salt
 
     @classmethod
     def ranlong(self, num):
-        salt = ''.join(random.sample(string.digits, num))
+        # salt = ''.join(random.sample(string.digits, num))
+        salt = ''.join(random.choice(string.digits) for i in range(num))
         return salt
 
     @classmethod
