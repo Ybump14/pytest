@@ -87,20 +87,25 @@ def res_validate(data, validate, status_code):
     assert status_code == validate["status"]
 
 
-class Publice(object):
+class Util:
+
+    @classmethod
     def ranstr(self, num):
         salt = ''.join(random.sample(string.ascii_uppercase + string.digits, num))
         return salt
 
+    @classmethod
     def ranlong(self, num):
         salt = ''.join(random.sample(string.digits, num))
         return salt
 
+    @classmethod
     def phoneNORandomGenerator(self):
         prelist = ["130", "131", "132", "133", "134", "135", "136", "137", "138", "139", "147", "150", "151", "152",
                    "153", "155", "156", "157", "158", "159", "186", "187", "188"]
         return random.choice(prelist) + "".join(random.choice("0123456789") for i in range(8))
 
+    @classmethod
     def provinceNORandom(self):
         data = {
             '北京': ['北京'],
@@ -154,6 +159,7 @@ class Publice(object):
             "city": city
         }
 
+    @classmethod
     def numberPlace(self):
         number = ['贵D', '贵G', '青F', '冀A', '新A', '吉G', '云N', '苏C', '赣L', '湘N', '藏A', '川V', '贵E', '川D', '冀F', '贵J', '豫F',
                   '川M', '渝C', '闽F', '闽D', '冀G', '黑F', '鄂B', '川R', '粤N', '鄂G', '桂E', '辽E', '赣J', '鲁M', '辽K', '陕A', '桂D',
