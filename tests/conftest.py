@@ -7,6 +7,7 @@ import pytest
 from _pytest import logging
 from _pytest.assertion.util import assertrepr_compare
 from utils.commlib import decode
+from filelock import FileLock
 
 
 def pytest_generate_tests(metafunc):
@@ -48,22 +49,53 @@ def env(request):
     return env_config
 
 
+'''https://pypi.org/project/pytest-xdist/ 
+Making session-scoped fixtures execute only once'''
+
+
 @pytest.fixture(scope="session")
-def token_oa(env):
-    url1 = env["data"]["url1"]
-    url_oa = env["data"]["url_oa"]
-    url = url1 + url_oa
-    data = {
-        "loginNum": env["data"]["username"],
-        "password": env["data"]["password"]
-    }
-    r = requests.post(url=url, json=data)
-    res = r.json()
-    if "randomId" in res:
-        response = decode(res["randomId"], res["encryptData"])
-        res = json.loads(response)
-    token = res["data"]["token"]
-    return token
+def token_oa(env, tmp_path_factory, worker_id):
+    if worker_id == "master":
+        url1 = env["data"]["url1"]
+        url_oa = env["data"]["url_oa"]
+        url = url1 + url_oa
+        data = {
+            "loginNum": env["data"]["username"],
+            "password": env["data"]["password"]
+        }
+        r = requests.post(url=url, json=data)
+        res = r.json()
+        if "randomId" in res:
+            response = decode(res["randomId"], res["encryptData"])
+            res = json.loads(response)
+        token = res["data"]["token"]
+        os.environ["token"] = token
+        return os.environ["token"]
+
+    root_tmp_dir = tmp_path_factory.getbasetemp().parent
+
+    fn = root_tmp_dir / "data.json"
+    with FileLock(str(fn) + ".lock"):
+        if fn.is_file():
+            token = json.loads(fn.read_text())
+            os.environ["token"] = token
+        else:
+            url1 = env["data"]["url1"]
+            url_oa = env["data"]["url_oa"]
+            url = url1 + url_oa
+            data = {
+                "loginNum": env["data"]["username"],
+                "password": env["data"]["password"]
+            }
+            r = requests.post(url=url, json=data)
+            res = r.json()
+            if "randomId" in res:
+                response = decode(res["randomId"], res["encryptData"])
+                res = json.loads(response)
+            token = res["data"]["token"]
+            fn.write_text(json.dumps(token))
+            os.environ["token"] = token
+    return os.environ["token"]
 
 
 @pytest.fixture(scope="session")
