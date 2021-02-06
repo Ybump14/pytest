@@ -1,5 +1,6 @@
 import pytest
-from utils.commlib import parameters_request
+
+from tests.conftest import parameters_request
 
 
 class Test_List():
@@ -107,6 +108,7 @@ class Test_List():
 
 if __name__ == '__main__':
     # pytest.main(['-v', '-s', 'test_List.py'])
-    pytest.main(['-v', '-s', '--env','test','test_List.py'])
+    pytest.main(['-v', '-s', '--env', 'test', 'test_List.py'])
 
-# pytest tests/test_List.py -v --lf -s
+# pytest tests/test_List.py -v -n auto 多线程
+# pytest tests/test_List.py -v  单线程

@@ -1,11 +1,9 @@
-import inspect
 import json
 import os, requests
-import allure
+import time
+
 import yaml
 import pytest
-from _pytest import logging
-from _pytest.assertion.util import assertrepr_compare
 from utils.commlib import decode
 from filelock import FileLock
 
@@ -47,10 +45,6 @@ def env(request):
     with open(config_path) as f:
         env_config = yaml.load(f.read(), Loader=yaml.SafeLoader)
     return env_config
-
-
-'''https://pypi.org/project/pytest-xdist/ 
-Making session-scoped fixtures execute only once'''
 
 
 @pytest.fixture(scope="session")
@@ -109,12 +103,32 @@ def token_financial(env):
     return token
 
 
-def pytest_assertrepr_compare(config, op, left, right):
-    left_name, right_name = inspect.stack()[7].code_context[0].lstrip().lstrip('assert').rstrip('\n').split(op)
-    pytest_output = assertrepr_compare(config, op, left, right)
-    logging.debug("{0} is\n {1}".format(left_name, left))
-    logging.debug("{0} is\n {1}".format(right_name, right))
-    with allure.step("校验结果"):
-        allure.attach(str(left), left_name)
-        allure.attach(str(right), right_name)
-    return pytest_output
+def parameters_request(env, parameters, token, Environmental=None):
+    headers = parameters["request"]["headers"]
+    headers["Authorization"] = token
+    headers["Timestamp"] = str(round(time.time()) * 1000)
+    requests.adapters.DEFAULT_RETRIES = 5
+    r = requests.session()
+    r.keep_alive = False
+    if Environmental in 'oa':
+        r = requests.request(parameters["request"]["method"], url=env["data"]["url1"] + parameters['name'],
+                             headers=headers,
+                             json=parameters["request"]["data"])
+    else:
+        r = requests.request(parameters["request"]["method"], url=env["data"]["url2"] + parameters['name'],
+                             headers=headers,
+                             json=parameters["request"]["data"])
+    if r.status_code == 200:
+        res_validate(r.json(), parameters["validate"], r.status_code)
+    else:
+        raise TypeError('the response status.code is %s' % r.status_code)
+    return r
+
+
+def res_validate(data, validate, status_code):
+    if "randomId" in data:
+        response = decode(data["randomId"], data["encryptData"])
+        data = json.loads(response)
+    assert data["code"] == validate["code"]
+    assert data["msg"] == validate["msg"]
+    assert status_code == validate["status"]
