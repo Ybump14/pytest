@@ -62,12 +62,12 @@ def token_oa(env, tmp_path_factory, worker_id):
         "loginNum": env["data"]["username"],
         "password": env["data"]["password"]
     }
-    r = requests.post(url=url, json=data)
-    res = r.json()
-    if "randomId" in res:
-        response = decode(res["randomId"], res["encryptData"])
-        res = json.loads(response)
     if worker_id == "master":
+        r = requests.post(url=url, json=data)
+        res = r.json()
+        if "randomId" in res:
+            response = decode(res["randomId"], res["encryptData"])
+            res = json.loads(response)
         token = res["data"]["token"]
         os.environ["token"] = token
         return os.environ["token"]
@@ -80,6 +80,11 @@ def token_oa(env, tmp_path_factory, worker_id):
             token = json.loads(fn.read_text())
             os.environ["token"] = token
         else:
+            r = requests.post(url=url, json=data)
+            res = r.json()
+            if "randomId" in res:
+                response = decode(res["randomId"], res["encryptData"])
+                res = json.loads(response)
             token = res["data"]["token"]
             fn.write_text(json.dumps(token))
             os.environ["token"] = token
