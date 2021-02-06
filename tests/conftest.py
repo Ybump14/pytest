@@ -1,7 +1,6 @@
 import json
 import os, requests
 import time
-
 import yaml
 import pytest
 from utils.commlib import decode
@@ -83,6 +82,11 @@ def token_oa(env, tmp_path_factory, worker_id):
             fn.write_text(json.dumps(token))
             os.environ["token"] = token
     return os.environ["token"]
+
+
+@pytest.fixture(scope='session', autouse=True)
+def faker_locale():
+    return ['zh_CN', 'en_US']
 
 
 @pytest.fixture(scope="session")
