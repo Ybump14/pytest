@@ -2,14 +2,14 @@ import pytest
 from models.CarInOrder import car_in_order_details
 from utils.Sql_connect import sql_connect
 from utils.mysql_connect import MySql
-from utils.commlib import parameters_request, Publice
+from utils.commlib import parameters_request, Util
 
 # vin = None
 # expressNo = None
 # carInOrderId = None
 # carInOrderDetails = None
 # contractId = None
-get_vin = Publice()
+
 
 
 class Test_CarInOrder(object):
@@ -28,8 +28,8 @@ class Test_CarInOrder(object):
         # global carInOrderId
         # global carInOrderDetails
         session = sql_connect()
-        parameters["request"]['data']['carInOrderDetails'][0]['vin'] = get_vin.ranstr(17)
-        parameters["request"]['data']['expressNo'] = get_vin.ranlong(6)
+        parameters["request"]['data']['carInOrderDetails'][0]['vin'] = Util.ranstr(17)
+        parameters["request"]['data']['expressNo'] = Util.ranlong(6)
         parameters_request(env, parameters, token_oa, Environmental='oa')
         Test_CarInOrder.vin = parameters["request"]['data']['carInOrderDetails'][0]['vin']
         Test_CarInOrder.expressNo = parameters["request"]['data']['expressNo']
@@ -45,7 +45,7 @@ class Test_CarInOrder(object):
         parameters["request"]['data']['carInOrderId'] = Test_CarInOrder.carInOrderId
         parameters_request(env, parameters, token_oa, Environmental='oa')
 
-    @pytest.mark.skip(reason='test')
+    # @pytest.mark.skip(reason='test')
     @pytest.mark.run(order=3)
     @pytest.mark.datafile("110_data/carInOrder/CarInStock.yml")
     def test_CarInStock(self, env, parameters, token_oa):
