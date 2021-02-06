@@ -2,14 +2,15 @@ import pytest
 from models.CarInOrder import car_in_order_details
 from utils.Sql_connect import sql_connect
 from utils.mysql_connect import MySql
-from utils.commlib import parameters_request, Util
+from utils.commlib import Util
+from tests.conftest import parameters_request
+
 
 # vin = None
 # expressNo = None
 # carInOrderId = None
 # carInOrderDetails = None
 # contractId = None
-
 
 
 class Test_CarInOrder(object):
