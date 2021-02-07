@@ -67,7 +67,7 @@ def token_oa(env, tmp_path_factory, worker_id):
 
     root_tmp_dir = tmp_path_factory.getbasetemp().parent
 
-    fn = root_tmp_dir / "data.json"
+    fn = root_tmp_dir / "token_oa.json"
     with FileLock(str(fn) + ".lock"):
         if fn.is_file():
             token = json.loads(fn.read_text())
@@ -90,7 +90,7 @@ def faker_locale():
 
 
 @pytest.fixture(scope="session")
-def token_financial(env):
+def token_financial(env, tmp_path_factory, worker_id):
     url1 = env["data"]["url2"]
     url_financial = env["data"]["url_financial"]
     url = url1 + url_financial
@@ -98,13 +98,33 @@ def token_financial(env):
         "loginNum": env["data"]["username"],
         "password": env["data"]["password"]
     }
-    r = requests.post(url=url, json=data)
-    res = r.json()
-    if "randomId" in res:
-        response = decode(res["randomId"], res["encryptData"])
-        res = json.loads(response)
-    token = res["data"]["token"]
-    return token
+    if worker_id == "master":
+        r = requests.post(url=url, json=data)
+        res = r.json()
+        if "randomId" in res:
+            response = decode(res["randomId"], res["encryptData"])
+            res = json.loads(response)
+        token = res["data"]["token"]
+        os.environ["token"] = token
+        return os.environ["token"]
+
+    root_tmp_dir = tmp_path_factory.getbasetemp().parent
+
+    fn = root_tmp_dir / "token_financial.json"
+    with FileLock(str(fn) + ".lock"):
+        if fn.is_file():
+            token = json.loads(fn.read_text())
+            os.environ["token"] = token
+        else:
+            r = requests.post(url=url, json=data)
+            res = r.json()
+            if "randomId" in res:
+                response = decode(res["randomId"], res["encryptData"])
+                res = json.loads(response)
+            token = res["data"]["token"]
+            fn.write_text(json.dumps(token))
+            os.environ["token"] = token
+    return os.environ["token"]
 
 
 def parameters_request(env, parameters, token, Environmental=None):
