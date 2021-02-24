@@ -9,6 +9,25 @@ class Test_Financial_List():
     def test_financialTreatment(self, env, parameters, token_financial):
         parameters_request(env, parameters, token_financial, Environmental='financial')
 
+    @pytest.mark.datafile("data/financial/fixedAssets.yml")
+    def test_fixedAssets(self, env, parameters, token_financial):
+        parameters_request(env, parameters, token_financial, Environmental='financial')
+
+    @pytest.mark.datafile("data/financial/businessBookkeeping.yml")
+    def test_businessBookkeeping(self, env, parameters, token_financial):
+        parameters_request(env, parameters, token_financial, Environmental='financial')
+
+    @pytest.mark.datafile("data/financial/authorityManagement.yml")
+    def test_authorityManagement(self, env, parameters, token_financial):
+        parameters_request(env, parameters, token_financial, Environmental='financial')
+
+    @pytest.mark.datafile("data/financial/parameterManagement.yml")
+    def test_parameterManagement(self, env, parameters, token_financial):
+        parameters_request(env, parameters, token_financial, Environmental='financial')
+
+    @pytest.mark.datafile("data/financial/financialStatements.yml")
+    def test_financialStatements(self, env, parameters, token_financial):
+        parameters_request(env, parameters, token_financial, Environmental='financial')
 
 if __name__ == '__main__':
     # pytest.main(['-v', '-s', 'test_List.py'])

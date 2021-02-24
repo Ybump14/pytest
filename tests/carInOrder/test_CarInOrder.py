@@ -20,7 +20,7 @@ class Test_CarInOrder(object):
     carInOrderDetails = None
     contractId = None
 
-    # @pytest.mark.skip(reason='test')
+    @pytest.mark.skip(reason='test')
     @pytest.mark.run(order=1)
     @pytest.mark.datafile("110_data/carInOrder/CarInOrderSave.yml")
     def test_CarInOrderSave(self, env, parameters, token_oa):
@@ -39,14 +39,14 @@ class Test_CarInOrder(object):
         Test_CarInOrder.carInOrderDetails = session.query(car_in_order_details).filter(
             car_in_order_details.vin == Test_CarInOrder.vin).first().id
 
-    # @pytest.mark.skip(reason='test')
+    @pytest.mark.skip(reason='test')
     @pytest.mark.run(order=2)
     @pytest.mark.datafile("110_data/carInOrder/CarInOrderAudit.yml")
     def test_CarInOrderAudit(self, env, parameters, token_oa):
         parameters["request"]['data']['carInOrderId'] = Test_CarInOrder.carInOrderId
         parameters_request(env, parameters, token_oa, Environmental='oa')
 
-    # @pytest.mark.skip(reason='test')
+    @pytest.mark.skip(reason='test')
     @pytest.mark.run(order=3)
     @pytest.mark.datafile("110_data/carInOrder/CarInStock.yml")
     def test_CarInStock(self, env, parameters, token_oa):
